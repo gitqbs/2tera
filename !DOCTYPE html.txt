@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Size to Terabytes Converter</title>
+</head>
+<body>
+    <h1>Convert Any Size to Terabytes</h1>
+    <input type="number" id="size" placeholder="Enter Size">
+    <select id="unit">
+        <option value="bytes">Bytes</option>
+        <option value="KB">Kilobytes</option>
+        <option value="MB">Megabytes</option>
+        <option value="GB">Gigabytes</option>
+        <option value="TB">Terabytes</option>
+    </select>
+    <button onclick="convertSize()">Convert</button>
+    <p id="result"></p>
+
+    <script>
+        function convertSize() {
+            const size = document.getElementById("size").value;
+            const unit = document.getElementById("unit").value;
+
+            fetch('/convert', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ size: Number(size), unit })
+            })
+            .then(response => response.json())
+            .then(data => document.getElementById("result").innerText = "Terabytes: " + data.terabytes)
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Conversion dictionary for different units to terabytes
+conversion_factors = {
+    "bytes": 1 / (1024**4),
+    "KB": 1 / (1024**3),
+    "MB": 1 / (1024**2),
+    "GB": 1 / 1024,
+    "TB": 1
+}
+
+@app.route('/convert', methods=['POST'])
+def convert_size():
+    data = request.json
+    size = data.get("size")
+    unit = data.get("unit")
+    
+    if unit not in conversion_factors:
+        return jsonify({"error": "Invalid unit"}), 400
+
+    tb_size = size * conversion_factors[unit]
+    return jsonify({"terabytes": tb_size})
+
+if __name__ == '__main__':
+    app.run(debug=True)
